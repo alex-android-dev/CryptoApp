@@ -4,6 +4,7 @@ import com.example.cryptoapp.data.database.CoinDbModel
 import com.example.cryptoapp.data.network.CoinDto
 import com.example.cryptoapp.data.network.CoinInfoJsonContainerDto
 import com.example.cryptoapp.data.network.CoinNamesListDto
+import com.example.cryptoapp.domain.CoinInfoEntity
 import com.google.gson.Gson
 
 class CoinMapper {
@@ -18,6 +19,18 @@ class CoinMapper {
         lowDay = coinDto.lowDay,
         lastMarket = coinDto.lastMarket,
         imageUrl = coinDto.imageUrl,
+    )
+
+    // DbModel -> Entity
+    fun mapDbModelToEntity(coinDbModel: CoinDbModel) = CoinInfoEntity(
+        fromSymbol = coinDbModel.fromSymbol,
+        toSymbol = coinDbModel.toSymbol,
+        price = coinDbModel.price,
+        lastUpdate = coinDbModel.lastUpdate,
+        highDay = coinDbModel.highDay,
+        lowDay = coinDbModel.lowDay,
+        lastMarket = coinDbModel.lastMarket,
+        imageUrl = coinDbModel.imageUrl,
     )
 
     // json to List Coin Dto
@@ -43,7 +56,9 @@ class CoinMapper {
     // coinNamesListDto to String
     // нужен для того, чтобы перевести имена валют в строку, для дальнеших запросов в АПИ
     fun mapCoinNamesListToString(coinNamesListDto: CoinNamesListDto): String {
-        return coinNamesListDto.names?.map { it.coinName?.name }?.joinToString(",") ?: ""
+        return coinNamesListDto.names
+            ?.map { it.coinName?.name }
+            ?.joinToString(",") ?: ""
         // всю коллекцию строк соединяем в одну строку через запятую
     }
 
