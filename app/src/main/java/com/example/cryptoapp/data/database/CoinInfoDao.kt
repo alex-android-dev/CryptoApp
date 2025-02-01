@@ -10,11 +10,11 @@ import com.example.cryptoapp.data.network.CoinDto
 @Dao
 interface CoinInfoDao {
     @Query("SELECT * FROM full_price_list ORDER BY lastUpdate DESC")
-    fun getPriceList(): LiveData<List<CoinDto>>
+    fun getPriceList(): LiveData<List<CoinDbModel>>
 
     @Query("SELECT * FROM full_price_list WHERE fromSymbol == :fSym LIMIT 1")
-    fun getPriceInfoAboutCoin(fSym: String): LiveData<CoinDto>
+    fun getPriceInfoAboutCoin(fSym: String): LiveData<CoinDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPriceList(priceList: List<CoinDto>)
+    fun insertPriceList(priceList: List<CoinDbModel>)
 }
