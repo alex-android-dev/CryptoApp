@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.cryptoapp.data.network.ApiFactory
 import com.example.cryptoapp.data.database.AppDatabase
-import com.example.cryptoapp.data.network.CoinPriceDto
+import com.example.cryptoapp.data.network.CoinDto
 import com.example.cryptoapp.data.network.CoinInfoJsonContainerDto
 import com.google.gson.Gson
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +20,7 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
 
     val priceList = db.coinPriceInfoDao().getPriceList()
 
-    fun getDetailInfo(fSym: String): LiveData<CoinPriceDto> {
+    fun getDetailInfo(fSym: String): LiveData<CoinDto> {
         return db.coinPriceInfoDao().getPriceInfoAboutCoin(fSym)
     }
 
@@ -48,8 +48,8 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun getPriceListFromRawData(
         coinPriceInfoRawData: CoinInfoJsonContainerDto
-    ): List<CoinPriceDto> {
-        val result = ArrayList<CoinPriceDto>()
+    ): List<CoinDto> {
+        val result = ArrayList<CoinDto>()
         val jsonObject = coinPriceInfoRawData.json ?: return result
         val coinKeySet = jsonObject.keySet()
         for (coinKey in coinKeySet) {
@@ -58,7 +58,7 @@ class CoinViewModel(application: Application) : AndroidViewModel(application) {
             for (currencyKey in currencyKeySet) {
                 val priceInfo = Gson().fromJson(
                     currencyJson.getAsJsonObject(currencyKey),
-                    CoinPriceDto::class.java
+                    CoinDto::class.java
                 )
                 result.add(priceInfo)
             }
