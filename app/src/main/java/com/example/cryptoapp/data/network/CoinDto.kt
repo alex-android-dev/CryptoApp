@@ -1,6 +1,9 @@
-package com.example.cryptoapp.domain
+package com.example.cryptoapp.data.network
 
-data class CoinInfo(
+import androidx.room.Entity
+
+@Entity(tableName = "full_price_list")
+data class CoinDto(
     val fromSymbol: String,
     val toSymbol: String?,
     val price: String?,
@@ -8,5 +11,5 @@ data class CoinInfo(
     val highDay: String?,
     val lowDay: String?,
     val lastMarket: String?,
-    val imageUrl: String
+    val imageUrl: String,
 )
