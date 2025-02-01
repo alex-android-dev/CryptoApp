@@ -3,13 +3,13 @@ package com.example.cryptoapp.data.mapper
 import com.example.cryptoapp.data.database.CoinDbModel
 import com.example.cryptoapp.data.network.CoinDto
 import com.example.cryptoapp.data.network.CoinInfoJsonContainerDto
-import com.example.cryptoapp.data.network.CoinNameDto
+import com.example.cryptoapp.data.network.CoinNamesListDto
 import com.google.gson.Gson
 
 class CoinMapper {
 
     // Dto -> DbModel
-    fun dtoToDbModel(coinDto: CoinDto) = CoinDbModel(
+    fun mapDtoToDbModel(coinDto: CoinDto) = CoinDbModel(
         fromSymbol = coinDto.fromSymbol,
         toSymbol = coinDto.toSymbol,
         price = coinDto.price,
@@ -21,7 +21,8 @@ class CoinMapper {
     )
 
     // json to List Coin Dto
-    fun jsonToListCoinDto(jsonContainer: CoinInfoJsonContainerDto): List<CoinDto> {
+    // подробно как работает описывал в obsidian (см. раздел Kotlin Serialization)
+    fun mapJsonToListCoinDto(jsonContainer: CoinInfoJsonContainerDto): List<CoinDto> {
         val result = mutableListOf<CoinDto>()
         val jsonObject = jsonContainer.json ?: return result
         val coinKeySet = jsonObject.keySet()
@@ -37,6 +38,13 @@ class CoinMapper {
             }
         }
         return result
+    }
+
+    // coinNamesListDto to String
+    // нужен для того, чтобы перевести имена валют в строку, для дальнеших запросов в АПИ
+    fun mapCoinNamesListToString(coinNamesListDto: CoinNamesListDto): String {
+        return coinNamesListDto.names?.map { it.coinName?.name }?.joinToString(",") ?: ""
+        // всю коллекцию строк соединяем в одну строку через запятую
     }
 
 
