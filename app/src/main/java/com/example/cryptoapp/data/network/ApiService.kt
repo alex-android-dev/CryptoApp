@@ -1,6 +1,5 @@
 package com.example.cryptoapp.data.network
 
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
