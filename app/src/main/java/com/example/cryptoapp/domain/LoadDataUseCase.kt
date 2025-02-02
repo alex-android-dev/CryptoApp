@@ -1,6 +1,6 @@
 package com.example.cryptoapp.domain
 
-class LoadData(
+class LoadDataUseCase(
     private val repository: CoinRepository,
 ) {
 
