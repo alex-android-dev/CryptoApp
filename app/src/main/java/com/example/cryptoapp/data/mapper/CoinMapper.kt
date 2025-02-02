@@ -6,6 +6,11 @@ import com.example.cryptoapp.data.network.CoinInfoJsonContainerDto
 import com.example.cryptoapp.data.network.CoinNamesListDto
 import com.example.cryptoapp.domain.CoinInfoEntity
 import com.google.gson.Gson
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class CoinMapper {
 
@@ -26,7 +31,7 @@ class CoinMapper {
         fromSymbol = coinDbModel.fromSymbol,
         toSymbol = coinDbModel.toSymbol,
         price = coinDbModel.price,
-        lastUpdate = coinDbModel.lastUpdate,
+        lastUpdate = convertTimestampToTime(coinDbModel.lastUpdate),
         highDay = coinDbModel.highDay,
         lowDay = coinDbModel.lowDay,
         lastMarket = coinDbModel.lastMarket,
@@ -62,5 +67,15 @@ class CoinMapper {
         // всю коллекцию строк соединяем в одну строку через запятую
     }
 
+
+    private fun convertTimestampToTime(timestamp: Long?): String {
+        if (timestamp == null) return ""
+        val stamp = Timestamp(timestamp * 1000)
+        val date = Date(stamp.time)
+        val pattern = "HH:mm:ss"
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        sdf.timeZone = TimeZone.getDefault()
+        return sdf.format(date)
+    }
 
 }
