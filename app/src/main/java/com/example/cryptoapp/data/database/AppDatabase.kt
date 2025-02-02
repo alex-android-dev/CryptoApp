@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [CoinDbModel::class], version = 1, exportSchema = false)
-
 abstract class AppDatabase : RoomDatabase() {
     companion object {
 
@@ -22,7 +21,9 @@ abstract class AppDatabase : RoomDatabase() {
                         context,
                         AppDatabase::class.java,
                         DB_NAME
-                    ).build()
+                    )
+                        .fallbackToDestructiveMigration()
+                        .build()
 
                 db = instance
                 return instance

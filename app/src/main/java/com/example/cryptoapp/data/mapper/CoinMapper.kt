@@ -23,7 +23,7 @@ class CoinMapper {
         highDay = coinDto.highDay,
         lowDay = coinDto.lowDay,
         lastMarket = coinDto.lastMarket,
-        imageUrl = coinDto.imageUrl,
+        imageUrl = BASE_IMAGE_URL + coinDto.imageUrl,
     )
 
     // DbModel -> Entity
@@ -76,6 +76,10 @@ class CoinMapper {
         val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         sdf.timeZone = TimeZone.getDefault()
         return sdf.format(date)
+    }
+
+    companion object {
+        const val BASE_IMAGE_URL = "https://cryptocompare.com"
     }
 
 }
