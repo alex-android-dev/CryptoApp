@@ -2,7 +2,7 @@ package com.example.cryptoapp.data.Repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.example.cryptoapp.data.database.AppDatabase
 import com.example.cryptoapp.data.database.CoinDbModel
 import com.example.cryptoapp.data.database.CoinInfoDao
@@ -23,9 +23,9 @@ class CoinRepositoryImpl(
 
     // методы получения
     override fun getCoinInfoList(): LiveData<List<CoinInfoEntity>> {
-        val liveDataListCoinDbModel: LiveData<List<CoinDbModel>> = coinInfoDao.getPriceList()
-        return Transformations.map(liveDataListCoinDbModel)
-        { listCoinDbModel ->
+        val liveDataCoinDbModelList: LiveData<List<CoinDbModel>> = coinInfoDao.getPriceList()
+
+        return liveDataCoinDbModelList.map { listCoinDbModel ->
             listCoinDbModel.map { dbModel ->
                 mapper.mapDbModelToEntity(dbModel)
             }
@@ -34,7 +34,7 @@ class CoinRepositoryImpl(
 
     override fun getCoinInfo(fromSymbol: String): LiveData<CoinInfoEntity> {
         val liveDataDbModel: LiveData<CoinDbModel> = coinInfoDao.getPriceInfoAboutCoin(fromSymbol)
-        return Transformations.map(liveDataDbModel) { dbModel ->
+        return liveDataDbModel.map { dbModel ->
             mapper.mapDbModelToEntity(dbModel)
         }
     }
