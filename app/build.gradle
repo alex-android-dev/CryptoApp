@@ -1,10 +1,12 @@
 plugins {
-    id("com.google.devtools.ksp")
-    id("com.android.application")
-    id("kotlin-android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
+    namespace 'com.example.cryptoapp'
     compileSdk = 34
     defaultConfig {
         applicationId = "com.example.cryptoapp"
@@ -30,33 +32,31 @@ android {
         viewBinding true
     }
 
-    namespace 'com.example.cryptoapp'
+    android {
+        packagingOptions {
+            exclude("META-INF/gradle/incremental.annotation.processors")
+        }
+    }
 }
 
 dependencies {
-    ksp("androidx.room:room-compiler:2.6.1")
+    implementation(libs.hilt.android.compiler)
+    ksp(libs.hilt.android)
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.cardview)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.picasso)
+    implementation(libs.androidx.work.runtime.ktx)
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
-
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
-
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-    def room_version = "2.4.0"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-
-    implementation 'com.squareup.picasso:picasso:2.71828'
-
-    implementation 'androidx.work:work-runtime-ktx:2.7.0'
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }
