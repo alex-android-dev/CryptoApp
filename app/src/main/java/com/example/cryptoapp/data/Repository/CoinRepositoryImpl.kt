@@ -3,11 +3,14 @@ package com.example.cryptoapp.data.Repository
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
 import com.example.cryptoapp.data.database.AppDatabase
 import com.example.cryptoapp.data.database.CoinDbModel
 import com.example.cryptoapp.data.database.CoinInfoDao
 import com.example.cryptoapp.data.mapper.CoinMapper
 import com.example.cryptoapp.data.network.ApiFactory
+import com.example.cryptoapp.data.worker.RefreshDataWorker
 import com.example.cryptoapp.domain.CoinInfoEntity
 import com.example.cryptoapp.domain.CoinRepository
 import kotlinx.coroutines.delay
@@ -18,7 +21,6 @@ class CoinRepositoryImpl(
 ) : CoinRepository {
 
     private val coinInfoDao: CoinInfoDao = AppDatabase.getInstance(application).coinPriceInfoDao()
-    private val apiService = ApiFactory.apiService
     private val mapper = CoinMapper()
 
     // методы получения
@@ -41,19 +43,11 @@ class CoinRepositoryImpl(
 
     // метод загрузки данных
     override suspend fun loadData() {
-        while (true) {
-            try {
-                val topCoins = apiService.getTopCoinsInfo(limit = 50)
-                val fSymb = mapper.mapCoinNamesListToString(topCoins)
-                val jsonContainer = apiService.getFullPriceList(fSyms = fSymb)
-                val coinInfoDtoList = mapper.mapJsonToListCoinDto(jsonContainer)
-                val dbModelList = coinInfoDtoList.map { coinDto ->
-                    mapper.mapDtoToDbModel(coinDto)
-                }
-                coinInfoDao.insertPriceList(dbModelList)
-            } catch (e: Exception) {
-            }
-            delay(10000)
-        }
+        val workManager = WorkManager.getInstance(application)
+        workManager.enqueueUniqueWork(
+            RefreshDataWorker.NAME,
+            ExistingWorkPolicy.REPLACE,
+            RefreshDataWorker.makeRequest()
+        )
     }
 }
