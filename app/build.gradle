@@ -40,8 +40,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.hilt.android.compiler)
-    ksp(libs.hilt.android)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
