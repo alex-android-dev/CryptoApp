@@ -14,14 +14,15 @@ import com.example.cryptoapp.data.worker.RefreshDataWorker
 import com.example.cryptoapp.domain.CoinInfoEntity
 import com.example.cryptoapp.domain.CoinRepository
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
 // реализация интерфейса
-class CoinRepositoryImpl(
+class CoinRepositoryImpl @Inject constructor(
+    private val mapper: CoinMapper,
+    private val coinInfoDao: CoinInfoDao,
     private val application: Application,
 ) : CoinRepository {
 
-    private val coinInfoDao: CoinInfoDao = AppDatabase.getInstance(application).coinPriceInfoDao()
-    private val mapper = CoinMapper()
 
     // методы получения
     override fun getCoinInfoList(): LiveData<List<CoinInfoEntity>> {
