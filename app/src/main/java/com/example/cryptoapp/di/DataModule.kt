@@ -17,16 +17,19 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class) // todo: поменять на другой
 interface DataModule {
 
+    @ApplicationScope
     @Binds
     fun bindCoinRepository(coinRepositoryImpl: CoinRepositoryImpl): CoinRepository
 
     companion object {
         @Provides
+        @ApplicationScope
         fun provideCoinInfoDao(application: Application): CoinInfoDao =
             AppDatabase.getInstance(application).coinPriceInfoDao()
 
         @Provides
-        fun provideApiService() : ApiService = ApiFactory.apiService
+        @ApplicationScope
+        fun provideApiService(): ApiService = ApiFactory.apiService
     }
 
 }
