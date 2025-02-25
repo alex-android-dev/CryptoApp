@@ -48,10 +48,12 @@ class RefreshDataWorker(
         private val apiService: ApiService,
         private val mapper: CoinMapper,
     ) : ChildWorkerFactory {
+
         override fun create(
             context: Context,
             workerParameters: WorkerParameters
         ): ListenableWorker =
             RefreshDataWorker(context, workerParameters, coinInfoDao, apiService, mapper)
+
     }
 }

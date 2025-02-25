@@ -1,9 +1,9 @@
 package com.example.cryptoapp.di
 
 import androidx.work.ListenableWorker
-import javax.inject.Scope
+import dagger.MapKey
 import kotlin.reflect.KClass
 
-@Scope
+@MapKey
 @Retention(AnnotationRetention.RUNTIME)
 annotation class WorkerKey(val value: KClass<out ListenableWorker>)
